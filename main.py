@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
-"""Write the vendored news poster to /output/entry.png.
+"""Decode image.b64 into the graded entry.png.
 
-The poster travels as base64 text (image.b64) so the repository holds
-only UTF-8 files. No network, no randomness, no clock: every run
-writes the same bytes. The poster itself is drawn by build_poster.py
-(flat colours, PIL, 1024x1024, 50 sourced stories of 18 Nov 2026).
+The poster is vendored as base64 so the repository stays text-only.
+Decoding is deterministic: the same input bytes always give the
+same output bytes, with no network and no clock involved.
 """
 import base64
 from pathlib import Path
 
-SRC = Path(__file__).resolve().parent / "image.b64"
-DST = Path("/output/entry.png")
+IMAGE_B64 = Path(__file__).resolve().parent / "image.b64"
+TARGET = Path("/output/entry.png")
 
 
-def main() -> None:
-    DST.parent.mkdir(parents=True, exist_ok=True)
-    DST.write_bytes(base64.b64decode(SRC.read_text(encoding="ascii")))
+def write_entry() -> Path:
+    TARGET.parent.mkdir(parents=True, exist_ok=True)
+    TARGET.write_bytes(base64.b64decode(IMAGE_B64.read_text(encoding="ascii")))
+    return TARGET
 
 
 if __name__ == "__main__":
-    main()
+    write_entry()
